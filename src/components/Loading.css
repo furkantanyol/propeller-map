@@ -1,0 +1,60 @@
+.spinner-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  max-width: 1200px;
+}
+
+.loader {
+  animation: rotator 1.4s linear infinite;
+}
+
+.path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {
+    stroke: darkgreen;
+  }
+  25% {
+    stroke: lightgreen;
+  }
+  50% {
+    stroke: darkgreen;
+  }
+  75% {
+    stroke: lightgreen;
+  }
+  100% {
+    stroke: darkgreen;
+  }
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  50% {
+    stroke-dashoffset: 100/4;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: 100;
+    transform: rotate(450deg);
+  }
+}

@@ -1,0 +1,16 @@
+.tiles-wrapper {
+  position: relative;
+  transition: 0.395s all cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tiles {
+  visibility: hidden;
+  opacity: 0;
+  height: 100%;
+  transition: 0.395s all cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tiles-active {
+  opacity: 1;
+  visibility: visible;
+}

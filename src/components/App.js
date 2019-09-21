@@ -1,11 +1,11 @@
 import React from 'react'
 import './App.css'
-import TileMap from './TileMap'
+import MapContainer from './MapContainer'
 
 function App() {
   return (
     <div className='App'>
-      <TileMap zoom={90}></TileMap>
+      <MapContainer />
     </div>
   )
 }
