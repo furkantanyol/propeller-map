@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<img
+  alt="tile"
+  src="https://via.placeholder.com/256"
+  style={
+    Object {
+      "left": "256px",
+      "position": "absolute",
+      "top": "256px",
+    }
+  }
+/>
+`;

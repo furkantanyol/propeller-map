@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { TILE_LENGTH } from '../util/constants'
 
-export default function Tile({ src, colIndex, rowIndex, onImgLoad }) {
+export default function Tile({ src, colIndex, rowIndex }) {
   return (
     <img
       style={{
@@ -19,6 +19,5 @@ export default function Tile({ src, colIndex, rowIndex, onImgLoad }) {
 Tile.propTypes = {
   src: PropTypes.string.isRequired,
   colIndex: PropTypes.number.isRequired,
-  rowIndex: PropTypes.number.isRequired,
-  onImgLoad: PropTypes.func.isRequired
+  rowIndex: PropTypes.number.isRequired
 }

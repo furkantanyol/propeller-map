@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="zoom-controller-wrapper"
+>
+  <div
+    className="zoom-controller-button zoom-controller-increase"
+    onClick={[MockFunction]}
+  >
+    +
+  </div>
+  <div
+    className="zoom-controller-button zoom-controller-decrease"
+    onClick={[MockFunction]}
+  >
+    -
+  </div>
+</div>
+`;
