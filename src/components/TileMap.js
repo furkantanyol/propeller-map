@@ -1,19 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getContainerSize } from '../util/helpers'
 import './TileMap.css'
 import Loading from './Loading'
-import { TILE_LENGTH } from '../util/constants'
 
-export default function TileMap({ zoom, zoomLevel, tiles, isLoading }) {
+export default function TileMap({
+  translateZ,
+  zoomLevel,
+  tiles,
+  isLoading,
+  onDoubleClick
+}) {
   const children = []
+
   if (tiles && !isLoading) {
     // Create tiles wrappers when Map Type tiles is loaded and handle zoomLevel change
     tiles.forEach((value, key) => {
       children.push(
         <div
           key={key}
-          className={`tiles ${zoomLevel - 1 === key ? 'tiles-active' : ''}`}
+          className={`tiles ${zoomLevel === key ? 'tiles-active' : ''}`}
         >
           {value}
         </div>
@@ -26,11 +31,10 @@ export default function TileMap({ zoom, zoomLevel, tiles, isLoading }) {
   return (
     <div
       style={{
-        width: `${getContainerSize(TILE_LENGTH, zoomLevel - 1)}px`,
-        height: `${getContainerSize(TILE_LENGTH, zoomLevel - 1)}px`,
-        transform: `scale(${zoom})`
+        transform: `translate3d(-50%, -50%, ${translateZ}px)`
       }}
       className='tiles-wrapper'
+      onDoubleClick={onDoubleClick}
     >
       {children}
     </div>

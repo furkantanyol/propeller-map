@@ -1,5 +1,7 @@
 .tiles-wrapper {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
   transition: 0.395s all cubic-bezier(0, 0, 0.2, 1);
 }
 
@@ -7,7 +9,6 @@
   visibility: hidden;
   opacity: 0;
   height: 100%;
-  transition: 0.395s all cubic-bezier(0, 0, 0.2, 1);
 }
 
 .tiles-active {

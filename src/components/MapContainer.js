@@ -3,24 +3,31 @@ import TileMap from './TileMap'
 import Tile from './Tile'
 import MapService from '../services/MapService'
 import ZoomController from './ZoomController'
-import { EXPRESS_URL, MIN_ZOOM, DELTA_ZOOM, MAX_ZOOM } from '../util/constants'
+import {
+  EXPRESS_URL,
+  MIN_ZOOM,
+  MAX_ZOOM,
+  MIN_TRANSLATE_Z,
+  DELTA_TRANSLATE_Z
+} from '../util/constants'
 
 export default class MapContainer extends Component {
   state = {
     zoom: MIN_ZOOM,
-    zoomLevel: 1,
+    zoomLevel: 0,
+    translateZ: MIN_TRANSLATE_Z,
     tilesForZoomLevels: null,
     isLoading: false,
     panClicking: false,
     panPreviousX: null,
-    panPreviousY: null
+    panPreviousY: null,
+    zoomLevels: null
   }
 
   panRef = React.createRef()
 
   async componentDidMount() {
     this.setState({ isLoading: true })
-
     // Fetch number of zoom levels with respect to number of folders in tiled directory
     // from the express backend
     const zoomLevels = Array.from(
@@ -69,20 +76,21 @@ export default class MapContainer extends Component {
   handleZoomIn = () => {
     {
       const { zoom, zoomLevel, zoomLevels } = this.state
-      const maxZoomLevel = zoomLevels.length
-      if (zoomLevel === maxZoomLevel && zoom === MAX_ZOOM - DELTA_ZOOM) return
+      const maxZoomLevel = zoomLevels.length - 1
+      if (zoomLevel === maxZoomLevel && zoom === MAX_ZOOM) return
     }
 
     this.setState(
-      prevState => ({ zoom: prevState.zoom + DELTA_ZOOM, zoomBackFlag: false }),
+      prevState => ({
+        zoom: prevState.zoom + 1,
+        translateZ: prevState.translateZ + DELTA_TRANSLATE_Z
+      }),
       () => {
         const { zoom } = this.state
-
-        if (zoom === MAX_ZOOM) {
+        if (zoom % 2 === 0) {
           this.setState(prevState => ({
             zoomLevel: prevState.zoomLevel + 1,
-            zoom: MIN_ZOOM,
-            zoomBackFlag: true
+            translateZ: MIN_TRANSLATE_Z
           }))
         }
       }
@@ -91,21 +99,30 @@ export default class MapContainer extends Component {
 
   handleZoomOut = () => {
     {
-      const { zoom, zoomLevel } = this.state
-      if (zoomLevel === 1 && zoom === MIN_ZOOM) return
+      const { zoom, zoomLevel, translateZ } = this.state
+      if (zoomLevel === 0 && translateZ === 0 && zoom === 0) return
     }
+    this.setState(
+      prevState => ({
+        zoom: prevState.zoom - 1
+      }),
+      () => {
+        const { zoom } = this.state
 
-    this.setState(prevState => {
-      if (this.state.zoomBackFlag) {
-        return {
-          zoom: prevState.zoom + DELTA_ZOOM,
-          zoomLevel: prevState.zoomLevel - 1,
-          zoomBackFlag: false
-        }
-      } else {
-        return { zoom: prevState.zoom - DELTA_ZOOM, zoomBackFlag: true }
+        this.setState(prevState => {
+          if (zoom % 2 === 0) {
+            return {
+              translateZ: prevState.translateZ - DELTA_TRANSLATE_Z
+            }
+          } else {
+            return {
+              zoomLevel: prevState.zoomLevel - 1,
+              translateZ: prevState.translateZ + DELTA_TRANSLATE_Z
+            }
+          }
+        })
       }
-    })
+    )
   }
 
   // PAN HANDLERS
@@ -147,27 +164,37 @@ export default class MapContainer extends Component {
   }
 
   render() {
-    const { zoom, zoomLevel, isLoading, tilesForZoomLevels } = this.state
+    const {
+      zoom,
+      zoomLevel,
+      isLoading,
+      tilesForZoomLevels,
+      translateZ
+    } = this.state
     return (
-      <div
-        className='container'
-        onMouseUp={this.handleMouseUp}
-        onMouseDown={this.handleMouseDown}
-        onMouseMove={this.handleMouseMove}
-        onMouseLeave={this.handleMouseLeave}
-        ref={this.panRef}
-      >
+      <React.Fragment>
         <ZoomController
           onZoomOut={this.handleZoomOut}
           onZoomIn={this.handleZoomIn}
         />
-        <TileMap
-          zoom={zoom}
-          zoomLevel={zoomLevel}
-          tiles={tilesForZoomLevels}
-          isLoading={isLoading}
-        />
-      </div>
+        <div
+          className='container'
+          onMouseUp={this.handleMouseUp}
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onMouseLeave={this.handleMouseLeave}
+          ref={this.panRef}
+        >
+          <TileMap
+            onDoubleClick={this.handleZoomIn}
+            zoom={zoom}
+            translateZ={translateZ}
+            zoomLevel={zoomLevel}
+            tiles={tilesForZoomLevels}
+            isLoading={isLoading}
+          />
+        </div>
+      </React.Fragment>
     )
   }
 }
